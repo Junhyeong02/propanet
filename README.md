@@ -10,9 +10,6 @@ PropaNet discovers the dynamics of TF networks against external stress such as h
 Given time-series **gene expression profile data** and **template network**, PropaNet retrieves **master regulatory TFs** in each time-point.
 
 
-
-![fig1_Overview](readme/1_overview.png)
-
 ## Installation
 
 ## Dependency
@@ -94,10 +91,18 @@ There should be _no header_ in the first row.
 
 
 ---
+
+## Workflow
+1. 
+
+1. Construct weighted network (Optional)
+2. Extract optimal transcription factors (Main process of PropaNet)
+3. Extract target genes
+4. Make final result
+
+
 ## Results
 The output is a network(in the form of an edge list) comprised of the resulting TFs/TGs that are found by PropaNet.
-
-![Output Network](readme/Output.png)
 
 ---
 
