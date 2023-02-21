@@ -1,0 +1,12 @@
+inputs:
+  exp_file: "data/DEG.AtGenExpress.signed_zstats.heat_shoots"
+  seed_file: "data/DEG.AtGenExpress.signed_binary.heat_shoots"
+  tf_li_file: "data/Ath_TF_list.gene"
+  result_dir: "result/GSE5621/"
+  grn_prefix: "data/Ara_GSE5621_2_normFalse_GRN_0.5_tp"
+  kegg_dir: "data/kegg_ath_gene.txt"
+
+parameters:
+  nThreads: 20
+  nTimePoints: 6
+  prefix: "PropaNet"

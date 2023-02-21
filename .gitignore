@@ -1,0 +1,7 @@
+*.pyc
+
+data/
+.snakemake/
+result/
+
+.ipynb_checkpoints/
