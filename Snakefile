@@ -18,7 +18,7 @@ rule make_final_result:
         join(config["inputs"]["result_dir"], "timeseries_network.txt")
     
     shell:
-        "python src/makeTGDesc.py " + result_dir
+        "python src/6_make_result.py " + result_dir
 
 rule extract_target_gene:
     input:
@@ -34,12 +34,12 @@ rule extract_target_gene:
         join(result_dir, "TG", "subnetwork.{i}")
 
     shell:
-        "python src/Target_genes.py --nwk {input.nwk} --deg {input.DEGli} --tf {params.tf_li_file} \
+        "python src/5_extract_target_genes.py --nwk {input.nwk} --deg {input.DEGli} --tf {params.tf_li_file} \
         --tfrank {input.tfranktrim} --out {params.output_dir}/subnetwork.{wildcards.i}"
 
 rule extract_optimal_tf_list:
     input:
-        expand(join(intermediate_results_dir, config["parameters"]["prefix"] + ".kccagrn.tp{i}.tsv"), \
+        expand(join(intermediate_results_dir, config["parameters"]["prefix"] + ".kccagrn.weighted.tp{i}.tsv"), \
             i = [tp for tp in range(1, config["parameters"]["nTimePoints"] + 1)])
 
     params:
@@ -60,10 +60,27 @@ rule extract_optimal_tf_list:
             i = [tp for tp in range(1, config["parameters"]["nTimePoints"] + 1)])
 
     shell:
-        "python src/main_propanet.py -TFliFile {params.tf_li_file} \
+        "python src/4_main_propanet.py -TFliFile {params.tf_li_file} \
         -nwkFile {params.temp}/{params.prefix}.tp -expFile {params.exp_file} \
         -binFile {params.seed_file} -N {params.n_sample} -p {params.n_threads} \
         -cond {params.prefix} -outD {params.temp}"
+
+rule construct_weighted_template_network:
+    input:
+        # config["inputs"]["grn_prefix"] + "{i}.tsv"
+        join(intermediate_results_dir, config["parameters"]["prefix"] + ".kccagrn.tp{i}.tsv")
+
+    params:
+        exp_file = config["inputs"]["exp_file"],
+        n_threads = config["parameters"]["nThreads"],
+        prefix = config["parameters"]["prefix"],
+
+    output:
+        # join(intermediate_results_dir, "{prefix}.tp{i}.tsv")
+        join(intermediate_results_dir, config["parameters"]["prefix"] + ".kccagrn.weighted.tp{i}.tsv")
+    
+    shell:
+        "python src/3_network_weight.py -nwk {input} -exp {params.exp_file} -o {output} -p {params.n_threads}"
 
 rule convert_pickle_to_tsv:
     input:
