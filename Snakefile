@@ -14,11 +14,15 @@ rule make_final_result:
         expand(join(result_dir, "TG", "subnetwork.{i}"), \
                 i = [tp for tp in range(1, config["parameters"]["nTimePoints"] + 1)])
 
+    params:
+        result_dir = result_dir
+        kegg = config["inputs"]["kegg_file"]
+
     output:
         join(config["inputs"]["result_dir"], "timeseries_network.txt")
     
     shell:
-        "python src/6_make_result.py " + result_dir
+        "python src/6_make_result.py {params.result_dir} --kegg {params.kegg}" 
 
 rule extract_target_gene:
     input:

@@ -29,8 +29,10 @@ def makeDict(keggF) :
 def main_TG():
   parser = argparse.ArgumentParser(usage='python %(prog)s resPath')
   parser.add_argument('resPath')
+  parser.add_argument('--kegg', required= True)
   args=parser.parse_args()
-  symDict, descDict = makeDict('data/kegg_ath_gene.txt')
+  
+  symDict, descDict = makeDict(args.kegg)
   outF = open(args.resPath+'/TGdesc.txt', 'w')
   for f in os.listdir(args.resPath) :
     if os.path.isdir(args.resPath+'/'+f) or f[-2:]!='TG': continue
